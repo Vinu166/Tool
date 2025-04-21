@@ -1,84 +1,222 @@
-const express = require('express');
-const multer = require('multer');
-const sharp = require('sharp');
-const path = require('path');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Free online image compression tool to optimize and reduce image size without losing quality. Customize compression levels easily." />
+    <meta name="keywords" content="image compressor, compress image, image optimization, reduce image size, online image tool" />
+    <meta name="author" content="Your Name or Brand" />
+    <title>Image Compression Tool - Optimize Your Images Easily</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #ffffff;
+            --accent-color: #f0f0f0;
+            --text-color: #333;
+        }
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+        * {
+            box-sizing: border-box;
+        }
 
-// Set up storage for multer
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+        }
 
-// Serve static files
-app.use(express.static('public'));
+        header {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 1.5em;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-// Image compression endpoint
-app.post('/compress', upload.single('image'), async (req, res) => {
-    const quality = parseInt(req.body.quality) || 80; // Default quality
-    try {
-        const compressedImage = await sharp(req.file.buffer)
-            .jpeg({ quality: quality }) // Change to .png or .webp as needed
-            .toBuffer();
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
 
-        res.set('Content-Type', 'image/jpeg');
-        res.send(compressedImage);
-    } catch (error) {
-        res.status(500).send('Error compressing image');
-    }
-});
+        header p {
+            margin: 0.5em 0 0;
+            font-size: 1rem;
+        }
 
-// Serve the HTML, CSS, and JS
-app.get('/', (req, res) => {
-    res.send(`
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Image Compressor</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f4f4f4;
-                padding: 20px;
+        main {
+            background: var(--secondary-color);
+            margin-top: 2em;
+            padding: 2em;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5em;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5em;
+            font-weight: bold;
+        }
+
+        input[type="file"],
+        input[type="range"] {
+            width: 100%;
+            padding: 0.5em;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75em 1.5em;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .output {
+            margin-top: 2em;
+            text-align: center;
+        }
+
+        #downloadLink {
+            display: inline-block;
+            margin-top: 1em;
+            padding: 0.75em 1.5em;
+            background-color: #2196F3;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+        .adsense-placeholder {
+            width: 100%;
+            text-align: center;
+            margin: 2em 0;
+            background-color: #e9ecef;
+            padding: 1.5em;
+            border-radius: 12px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.5rem;
             }
-            .container {
-                max-width: 600px;
-                margin: auto;
-                background: white;
-                padding: 20px;
-                border-radius: 5px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+            header p {
+                font-size: 0.9rem;
             }
-            h1 {
-                text-align: center;
+
+            main {
+                padding: 1em;
             }
-            form {
-                display: flex;
-                flex-direction: column;
+
+            button, #downloadLink {
+                font-size: 0.9rem;
+                padding: 0.75em;
             }
-            input[type="file"],
-            input[type="number"],
-            button {
-                margin: 10px 0;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Image Compressor</h1>
-            <form id="uploadForm">
-                <input type="file" id="image" accept="image/*" required>
-                <label for="quality">Quality (1-100):</label>
-                <input type="number" id="quality" name="quality" min="1" max="100" value="80">
-                <button type="submit">Compress Image</button>
-            </form>
-            <div id="result"></div>
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Image Compression Tool</h1>
+        <p>Compress and optimize your images easily!</p>
+    </header>
+
+    <!-- AdSense Placeholder -->
+    <div class="adsense-placeholder">
+        <!-- Replace 'ca-pub-XXXXXXX' and 'XXXXXXX' with your actual AdSense ID and ad slot ID -->
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXX"
+            crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-XXXXXXX"
+            data-ad-slot="XXXXXXX"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <main>
+        <div class="form-group">
+            <label for="imageInput">Choose an image:</label>
+            <input type="file" id="imageInput" accept="image/*" />
         </div>
-        <script>
-            document.getElementById('uploadForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
+        <div class="form-group">
+            <label for="quality">Compression Level: <span id="qualityValue">80</span>%</label>
+            <input type="range" id="quality" min="10" max="100" value="80" />
+        </div>
+        <button onclick="compressImage()">Compress Image</button>
 
-                const formData = new FormData();
-                const
+        <div class="output">
+            <canvas id="canvas" style="display:none;"></canvas>
+            <a id="downloadLink" style="display:none;" download="compressed-image.jpg">Download Compressed Image</a>
+        </div>
+    </main>
+
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const qualitySlider = document.getElementById('quality');
+        const qualityValue = document.getElementById('qualityValue');
+        const canvas = document.getElementById('canvas');
+        const downloadLink = document.getElementById('downloadLink');
+
+        qualitySlider.addEventListener('input', () => {
+            qualityValue.textContent = qualitySlider.value;
+        });
+
+        function compressImage() {
+            const file = imageInput.files[0];
+            if (!file) {
+                alert("Please select an image.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function (event) {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = function () {
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    const quality = qualitySlider.value / 100;
+                    canvas.toBlob(function (blob) {
+                        const url = URL.createObjectURL(blob);
+                        downloadLink.href = url;
+                        downloadLink.style.display = 'inline-block';
+                        downloadLink.textContent = 'Download Compressed Image (' + Math.round(blob.size / 1024) + ' KB)';
+                        canvas.style.display = 'none';
+                    }, 'image/jpeg', quality);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
