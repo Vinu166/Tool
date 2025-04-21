@@ -53,7 +53,6 @@ jwcrypto==1.5.6
 Kivy==2.3.1
 Kivy-examples==2.3.1
 Kivy-Garden==0.1.5
-kivy_deps.angle==0.4.0
 kivy_deps.glew==0.3.1
 kivy_deps.sdl2==0.8.0
 kivymd==1.2.0
