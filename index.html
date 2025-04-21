@@ -1,72 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Compressor</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        input[type="file"],
-        input[type="number"],
-        button {
-            margin: 10px 0;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Free AI-powered tools for image, PDF, and document processing. Compress, convert, and edit files online with ease." />
+  <meta name="keywords" content="AI tools, image tools, PDF tools, online file converter, file compressor, document editor" />
+  <meta name="author" content="YourBrand" />
+  <title>AI Tools Hub - Smart Tools for Images & PDFs</title>
+  <style>
+    :root {
+      --primary: #007BFF;
+      --secondary: #f8f9fa;
+      --text: #343a40;
+      --bg: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--secondary);
+      color: var(--text);
+    }
+
+    header {
+      background-color: var(--primary);
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+    }
+
+    header p {
+      margin-top: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    main {
+      padding: 2rem 1rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .tool-card {
+      background-color: var(--bg);
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px var(--shadow);
+      transition: transform 0.2s ease;
+      text-align: center;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .tool-card h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    .tool-card p {
+      font-size: 0.95rem;
+      color: #666;
+    }
+
+    .tool-card a {
+      display: inline-block;
+      margin-top: 1rem;
+      background-color: var(--primary);
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+
+    .tool-card a:hover {
+      background-color: #0056b3;
+    }
+
+    footer {
+      background-color: #212529;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Image Compressor</h1>
-        <form id="uploadForm">
-            <input type="file" id="image" accept="image/*" required>
-            <label for="quality">Quality (1-100):</label>
-            <input type="number" id="quality" name="quality" min="1" max="100" value="80">
-            <button type="submit">Compress Image</button>
-        </form>
-        <div id="result"></div>
+  <header>
+    <h1>AI Tools Hub</h1>
+    <p>Smart Online Tools to Optimize, Convert & Edit Files</p>
+  </header>
+
+  <main>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <h3>Image Compressor</h3>
+        <p>Reduce image size without losing quality.</p>
+        <a href="img-compress.html">Try Now</a>
+      </div>
+      <div class="tool-card">
+        <h3>PDF Compressor</h3>
+        <p>Compress large PDF files for faster sharing.</p>
+        <a href="#">Coming Soon</a>
+      </div>
+      <div class="tool-card">
+        <h3>Image to PDF</h3>
+        <p>Convert images to downloadable PDF documents.</p>
+        <a href="#">Coming Soon</a>
+      </div>
+      <div class="tool-card">
+        <h3>PDF to Word</h3>
+        <p>Convert PDF documents into editable Word files.</p>
+        <a href="#">Coming Soon</a>
+      </div>
+      <div class="tool-card">
+        <h3>Remove Background</h3>
+        <p>AI-powered tool to erase image backgrounds easily.</p>
+        <a href="#">Coming Soon</a>
+      </div>
     </div>
-    <script>
-        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+  </main>
 
-            const formData = new FormData();
-            const imageFile = document.getElementById('image').files[0];
-            const quality = document.getElementById('quality').value;
-
-            formData.append('image', imageFile);
-            formData.append('quality', quality);
-
-            const response = await fetch('/compress', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (response.ok) {
-                const blob = await response.blob();
-                const url = URL.createObjectURL(blob);
-                document.getElementById('result').innerHTML = `<h2>Compressed Image:</h2><img src="${url}" alt="Compressed Image" />`;
-            } else {
-                document.getElementById('result').innerText = 'Error compressing image';
-            }
-        });
-    </script>
+  <footer>
+    <p>&copy; 2025 AI Tools Hub. All rights reserved.</p>
+  </footer>
 </body>
 </html>
